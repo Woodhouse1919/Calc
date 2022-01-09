@@ -1,38 +1,69 @@
-let display = document.querySelector('.result');
-let storedDisplay = document.querySelector('.stored-equation');
 const number = document.querySelectorAll('.number');
 const operator = document.querySelectorAll('.operator');
 const equals = document.querySelector('#equals');
-let equation = [];
-let storedEquation = [];
-let chosenOperator = '';
+const clear = document.querySelector('#clear');
+let activeDisplay = document.querySelector('.result');
+let storedDisplay = document.querySelector('.stored-equation');
+let activeNumber = '';
+let storedNumber = '';
+let activeOperator = null;
+let result = null;
 
-// stores numbers that user clicks into the equation variable and displays it in the calc screen
 number.forEach((num) => num.addEventListener('click', (e) => screenUpdate(e)));
 
-function screenUpdate(e) {
-  equation += e.target.textContent;
-  display.textContent = equation;
-}
-
-operator.forEach((op) => {
+operator.forEach((op) =>
   op.addEventListener('click', (e) => {
-    if (e.target.textContent === '+') {
-      if (equation.length > 0) {
-        chosenOperator = add;
-        storedEquation = equation;
-        equation = [];
-        storedDisplay.textContent = `${storedEquation} +`;
-      }
-    }
-  });
-});
+    checkOperation(e);
+    console.log(activeOperator)
+  })
+);
 
 equals.addEventListener('click', () => {
-  result = operate(chosenOperator, Number(storedEquation), Number(equation));
-  display.textContent = result;
-  storedEquation = result;
+  result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
+  reset();
 });
+
+clear.addEventListener('click', () => {
+  activeNumber = '';
+  storedNumber = '';
+  activeDisplay.textContent = '';
+  storedDisplay.textContent = '';
+  activeOperator = null;
+  result = null;
+});
+
+function screenUpdate(e) {
+  activeNumber += e.target.textContent;
+  activeDisplay.textContent = activeNumber;
+}
+
+function checkOperation(e) {
+  storedNumber = activeNumber;
+
+  if (e.target.textContent === '+') {
+    storedDisplay.textContent = `${storedNumber} +`;
+    activeOperator = add;
+  } else if (e.target.textContent === '-') {
+    storedDisplay.textContent = `${storedNumber} -`;
+    activeOperator = subtract;
+  } else if (e.target.textContent === '÷') {
+    storedDisplay.textContent = `${storedNumber} ÷`;
+    activeOperator = divide;
+  } else if (e.target.textContent === 'x') {
+    storedDisplay.textContent = `${storedNumber} x`;
+    activeOperator = multiply;
+  }
+  activeNumber = '';
+}
+
+function reset() {
+  activeDisplay.textContent = result;
+  storedDisplay.textContent = '';
+  activeNumber = result;
+  storedNumber = '';
+  result = null;
+  activeOperator = null;
+}
 
 function operate(operator, num1, num2) {
   if (operator === add) {
