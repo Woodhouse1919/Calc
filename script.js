@@ -137,7 +137,3 @@ function checkDivideByZero() {
   }
 }
 
-function checkDecimal() {
-  decimal.addEventListener('click', () => {
-  })
-}
