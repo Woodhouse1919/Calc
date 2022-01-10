@@ -9,6 +9,7 @@ let activeNumber = '';
 let storedNumber = '';
 let activeOperator = null;
 let result = null;
+divideByZero = false;
 
 number.forEach((num) => {
   num.addEventListener('click', (e) => {
@@ -18,6 +19,15 @@ number.forEach((num) => {
 });
 
 equals.addEventListener('click', () => {
+  if (storedNumber === '') {
+    return
+  }
+  checkDivideByZero()
+  if (divideByZero === true) {
+    reset()
+    activeDisplay.textContent = 'Cannot divide by zero'
+    return
+  }
   result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
   reset();
 });
@@ -29,6 +39,12 @@ operator.forEach((op) => {
       activeNumber = '';
       evaluateEquation(e);
     } else {
+      checkDivideByZero()
+      if (divideByZero === true) {
+        reset()
+        activeDisplay.textContent = 'Cannot divide by zero'
+        return
+      }
       result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
       storedNumber = result
       activeNumber = ''
@@ -90,6 +106,7 @@ clear.addEventListener('click', () => {
   storedDisplay.textContent = '';
   activeOperator = null;
   result = null;
+  divideByZero = false
 });
 
 del.addEventListener('click', () => {
@@ -103,4 +120,12 @@ function reset() {
   activeNumber = result;
   storedNumber = '';
   activeOperator = null;
+  divideByZero = false
+}
+
+function checkDivideByZero() {
+  if (activeNumber === '0' && activeOperator === divide) {
+    return divideByZero = true
+    
+  }
 }
