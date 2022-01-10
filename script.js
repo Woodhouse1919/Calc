@@ -9,37 +9,38 @@ let storedNumber = '';
 let activeOperator = null;
 let result = null;
 
-number.forEach((num) => num.addEventListener('click', (e) => screenUpdate(e)));
-
-operator.forEach((op) =>
-  op.addEventListener('click', (e) => {
-    checkOperation(e);
-    console.log(activeOperator)
-  })
-);
+number.forEach((num) => {
+  num.addEventListener('click', (e) => {
+    activeNumber += e.target.textContent;
+    activeDisplay.textContent = activeNumber;
+  });
+});
 
 equals.addEventListener('click', () => {
   result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
   reset();
 });
 
-clear.addEventListener('click', () => {
-  activeNumber = '';
-  storedNumber = '';
-  activeDisplay.textContent = '';
-  storedDisplay.textContent = '';
-  activeOperator = null;
-  result = null;
+operator.forEach((op) => {
+  op.addEventListener('click', (e) => {
+    if (storedNumber === '') {
+      storedNumber = activeNumber;
+      activeNumber = '';
+      console.log('eval equals ran');
+      evaluateEquation(e);
+    } else {
+      result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
+      storedNumber = result
+      activeNumber = ''
+      activeDisplay.textContent = ''
+      console.log('eval multi ran');
+      evaluateEquation(e)
+    }
+    
+  });
 });
 
-function screenUpdate(e) {
-  activeNumber += e.target.textContent;
-  activeDisplay.textContent = activeNumber;
-}
-
-function checkOperation(e) {
-  storedNumber = activeNumber;
-
+function evaluateEquation(e) {
   if (e.target.textContent === '+') {
     storedDisplay.textContent = `${storedNumber} +`;
     activeOperator = add;
@@ -53,16 +54,6 @@ function checkOperation(e) {
     storedDisplay.textContent = `${storedNumber} x`;
     activeOperator = multiply;
   }
-  activeNumber = '';
-}
-
-function reset() {
-  activeDisplay.textContent = result;
-  storedDisplay.textContent = '';
-  activeNumber = result;
-  storedNumber = '';
-  result = null;
-  activeOperator = null;
 }
 
 function operate(operator, num1, num2) {
@@ -92,3 +83,20 @@ const multiply = (a, b) => {
 const divide = (a, b) => {
   return a / b;
 };
+
+clear.addEventListener('click', () => {
+  activeNumber = '';
+  storedNumber = '';
+  activeDisplay.textContent = '';
+  storedDisplay.textContent = '';
+  activeOperator = null;
+  result = null;
+});
+
+function reset() {
+  activeDisplay.textContent = result;
+  storedDisplay.textContent = '';
+  activeNumber = result;
+  storedNumber = '';
+  activeOperator = null;
+}
