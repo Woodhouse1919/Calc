@@ -3,6 +3,7 @@ const operator = document.querySelectorAll('.operator');
 const equals = document.querySelector('#equals');
 const clear = document.querySelector('#clear');
 const del = document.querySelector('#delete');
+const decimal = document.querySelector('#decimal')
 let activeDisplay = document.querySelector('.result');
 let storedDisplay = document.querySelector('.stored-equation');
 let activeNumber = '';
@@ -13,6 +14,11 @@ divideByZero = false;
 
 number.forEach((num) => {
   num.addEventListener('click', (e) => {
+    if (activeNumber.length === 19) {
+      return
+    } else if (activeNumber.includes('.') && e.target.textContent === '.') {
+      return
+    }
     activeNumber += e.target.textContent;
     activeDisplay.textContent = activeNumber;
   });
@@ -129,4 +135,9 @@ function checkDivideByZero() {
   if (activeNumber === '0' && activeOperator === divide) {
     return (divideByZero = true);
   }
+}
+
+function checkDecimal() {
+  decimal.addEventListener('click', () => {
+  })
 }
