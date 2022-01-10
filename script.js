@@ -2,7 +2,7 @@ const number = document.querySelectorAll('.number');
 const operator = document.querySelectorAll('.operator');
 const equals = document.querySelector('#equals');
 const clear = document.querySelector('#clear');
-const del = document.querySelector('#delete')
+const del = document.querySelector('#delete');
 let activeDisplay = document.querySelector('.result');
 let storedDisplay = document.querySelector('.stored-equation');
 let activeNumber = '';
@@ -19,14 +19,14 @@ number.forEach((num) => {
 });
 
 equals.addEventListener('click', () => {
-  if (storedNumber === '') {
-    return
+  if (storedNumber === '' || activeNumber === '') {
+    return;
   }
-  checkDivideByZero()
+  checkDivideByZero();
   if (divideByZero === true) {
-    reset()
-    activeDisplay.textContent = 'Cannot divide by zero'
-    return
+    reset();
+    activeDisplay.textContent = 'Cannot divide by zero';
+    return;
   }
   result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
   reset();
@@ -34,28 +34,30 @@ equals.addEventListener('click', () => {
 
 operator.forEach((op) => {
   op.addEventListener('click', (e) => {
-    if (storedNumber === '') {
+    if (storedNumber === '' || activeNumber === '') {
       storedNumber = activeNumber;
       activeNumber = '';
       evaluateEquation(e);
     } else {
-      checkDivideByZero()
+      checkDivideByZero();
       if (divideByZero === true) {
-        reset()
-        activeDisplay.textContent = 'Cannot divide by zero'
-        return
+        reset();
+        activeDisplay.textContent = 'Cannot divide by zero';
+        return;
       }
       result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
-      storedNumber = result
-      activeNumber = ''
-      activeDisplay.textContent = ''
-      evaluateEquation(e)
+      storedNumber = result;
+      activeNumber = '';
+      activeDisplay.textContent = '';
+      evaluateEquation(e);
     }
-    
   });
 });
 
 function evaluateEquation(e) {
+  if (storedNumber === '') {
+    return
+  }
   if (e.target.textContent === '+') {
     storedDisplay.textContent = `${storedNumber} +`;
     activeOperator = add;
@@ -106,13 +108,13 @@ clear.addEventListener('click', () => {
   storedDisplay.textContent = '';
   activeOperator = null;
   result = null;
-  divideByZero = false
+  divideByZero = false;
 });
 
 del.addEventListener('click', () => {
-  activeNumber = activeNumber.slice(0, -1)
-  activeDisplay.textContent = activeNumber
-})
+  activeNumber = activeNumber.slice(0, -1);
+  activeDisplay.textContent = activeNumber;
+});
 
 function reset() {
   activeDisplay.textContent = result;
@@ -120,12 +122,11 @@ function reset() {
   activeNumber = result;
   storedNumber = '';
   activeOperator = null;
-  divideByZero = false
+  divideByZero = false;
 }
 
 function checkDivideByZero() {
   if (activeNumber === '0' && activeOperator === divide) {
-    return divideByZero = true
-    
+    return (divideByZero = true);
   }
 }
