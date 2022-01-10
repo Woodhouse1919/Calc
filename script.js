@@ -2,6 +2,7 @@ const number = document.querySelectorAll('.number');
 const operator = document.querySelectorAll('.operator');
 const equals = document.querySelector('#equals');
 const clear = document.querySelector('#clear');
+const del = document.querySelector('#delete')
 let activeDisplay = document.querySelector('.result');
 let storedDisplay = document.querySelector('.stored-equation');
 let activeNumber = '';
@@ -26,14 +27,12 @@ operator.forEach((op) => {
     if (storedNumber === '') {
       storedNumber = activeNumber;
       activeNumber = '';
-      console.log('eval equals ran');
       evaluateEquation(e);
     } else {
       result = operate(activeOperator, Number(storedNumber), Number(activeNumber));
       storedNumber = result
       activeNumber = ''
       activeDisplay.textContent = ''
-      console.log('eval multi ran');
       evaluateEquation(e)
     }
     
@@ -92,6 +91,11 @@ clear.addEventListener('click', () => {
   activeOperator = null;
   result = null;
 });
+
+del.addEventListener('click', () => {
+  activeNumber = activeNumber.slice(0, -1)
+  activeDisplay.textContent = activeNumber
+})
 
 function reset() {
   activeDisplay.textContent = result;
